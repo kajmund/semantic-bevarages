@@ -1,1 +1,1 @@
-faiss
+faiss-cpu==1.7.0
