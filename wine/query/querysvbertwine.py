@@ -43,7 +43,7 @@ def search_FAISSIndex(data=None, id_col_name=None, query=None, index=None, nprob
 
 def query_swe_bert(query):
     print("Bert query:\n" + query)
-    index = faiss.read_index("./wine_data_collect/movies_desc.index")
+    index = faiss.read_index("./wine/wine_data_collect/movies_desc.index")
     # from wine_data_collect import preparedata
     # vinbeskrivningar = preparedata.collect_all_sentences()
     model_name = 'KBLab/sentence-bert-swedish-cased'
