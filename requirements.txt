@@ -1,2 +1,5 @@
 faiss-cpu
-
+sentence_transformers
+pandas
+streamlit
+torch
