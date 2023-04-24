@@ -19,7 +19,7 @@ def load_data(q):
             if idx['id'] == data['id']:
                 data['distance'] = idx['distance']
 
-    return sorted(wd, key=operator.itemgetter('distance'), reverse=True)
+    return sorted(wd, key=operator.itemgetter('distance'), reverse=False)
 
 
 def display_wine(wine, image_url):
@@ -39,8 +39,8 @@ def display_wine(wine, image_url):
         if has_button_clicked:
             st.session_state['query_text'] = to_description(query_one_result(wine['id']))
             st.experimental_rerun()
-        formatted_percentage = f"{wine['distance'] * 100:.2f}%"
-        st.write(f"*match {formatted_percentage}*")
+        formatted_percentage = f"{wine['distance']:.2f}"
+        st.write(f"*distans {formatted_percentage}*")
 
     st.write("---")
 
