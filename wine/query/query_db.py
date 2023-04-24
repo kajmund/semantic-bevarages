@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def query_one_result(wine_id: str, db='systemet.db'):
-    con = sqlite3.connect('systemet.db')
+    con = sqlite3.connect('./wine/systemet.db')
     query_str = "SELECT * FROM main.systembolaget WHERE id = {}".format(int(wine_id))
     return pd.read_sql_query(query_str, con).to_dict('records')[0]
 
@@ -14,7 +14,7 @@ def query_one_result(wine_id: str, db='systemet.db'):
 
 
 def query_sql(index_result: List, db='./systemet.db') -> List[Any]:
-    con = sqlite3.connect('systemet.db')
+    con = sqlite3.connect('./wine/systemet.db')
     ids = []
     for res in index_result:
         ids.append(str(res['id']))
