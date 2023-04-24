@@ -1,12 +1,23 @@
-import math
 import faiss
 import pandas as pd
+import streamlit as st
 from sentence_transformers import SentenceTransformer
 
+
+@st.cache(allow_output_mutation=True)
+def load_model():
+    model_name = 'KBLab/sentence-bert-swedish-cased'
+    return SentenceTransformer(model_name, device='cuda')
+
+
+@st.cache(allow_output_mutation=True)
+def load_index():
+    return faiss.read_index("./wine/wine_data_collect/movies_desc.index")
+
+
 # Ladda modell och index vid start
-model_name = 'KBLab/sentence-bert-swedish-cased'
-model = SentenceTransformer(model_name, device='cpu')
-index = faiss.read_index("./wine/wine_data_collect/movies_desc.index")
+model = load_model()
+index = load_index()
 
 
 def search_FAISSIndex(data=None, id_col_name=None, query=None, index=None, nprobe=None, model=None, topk=20):
@@ -41,7 +52,7 @@ def search_FAISSIndex(data=None, id_col_name=None, query=None, index=None, nprob
 
 def query_swe_bert(query):
     print("Bert query:\n" + query)
-    search_result = search_FAISSIndex( id_col_name="id", query=query, index=index, nprobe=10, model=model, topk=20)
+    search_result = search_FAISSIndex(id_col_name="id", query=query, index=index, nprobe=10, model=model, topk=20)
     combined_list = []
     id_list = [id + 1 for id in search_result['id']]
     for distance, _ids in zip(search_result['cosine_sim'], id_list):

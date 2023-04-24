@@ -18,8 +18,7 @@ def load_data(q):
         for idx in result:
             if idx['id'] == data['id']:
                 data['distance'] = idx['distance']
-
-    return sorted(wd, key=operator.itemgetter('distance'), reverse=False)
+    return wd
 
 
 def display_wine(wine, image_url):
