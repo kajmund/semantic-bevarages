@@ -4,7 +4,7 @@ import streamlit as st
 
 from query.query_db import query_sql, query_one_result
 from query.querysvbertwine import query_swe_bert
-from wine_data_collect.preparedata import to_description
+from wine_data_collect.preparedata import to_description, to_query_description
 
 if 'query_text' not in st.session_state:
     print("I cool")
@@ -37,7 +37,7 @@ def display_wine(wine, image_url):
     with cols[2]:
         has_button_clicked = st.button("Hitta liknande", key=image_url)
         if has_button_clicked:
-            st.session_state['query_text'] = to_description(query_one_result(wine['id']))
+            st.session_state['query_text'] = to_query_description(query_one_result(wine['id']))
             st.experimental_rerun()
         formatted_percentage = f"{wine['distance']:.2f}"
         st.write(f"*distans {formatted_percentage}*")
