@@ -1,39 +1,46 @@
 import sqlite3
 from typing import List, Any
 import pandas as pd
+import streamlit as st
+import contextlib
+
+DB_PATH = './wine/systemet.db'
 
 
-def query_one_result(wine_id: str, db='systemet.db'):
-    con = sqlite3.connect('./wine/systemet.db')
+@contextlib.contextmanager
+def connect_to_db(db_path):
+    conn = sqlite3.connect(db_path)
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
+def query_one_result(wine_id: str):
     query_str = "SELECT * FROM main.systembolaget WHERE id = {}".format(int(wine_id))
-    return pd.read_sql_query(query_str, con).to_dict('records')[0]
-
-    # for row in cur.execute(query_str):
-    #    row_dict = dict(zip([i[0] for i in cur.description], row))  # Convert the row tuple to a dictionary
-    #    return row_dict
+    with connect_to_db(DB_PATH) as con:
+        return pd.read_sql_query(query_str, con).to_dict('records')[0]
 
 
-def query_sql(index_result: List, db='./systemet.db') -> List[Any]:
-    con = sqlite3.connect('./wine/systemet.db')
+def query_sql(index_result: List) -> List[Any]:
     ids = []
     for res in index_result:
         ids.append(str(res['id']))
 
     query_str = "SELECT * FROM systembolaget WHERE id IN ({}) " \
                 "AND images is not '[]' " \
-        .format(', '.join(ids))  # Changed the query to use placeholders
+        .format(', '.join(ids))
 
-    print("Query String: " + query_str)  # Added line to print query_str
+    print("Query String: " + query_str)
 
-    df = pd.read_sql_query(query_str, con)
+    with connect_to_db(DB_PATH) as con:
+        df = pd.read_sql_query(query_str, con)
 
-    # Definiera ditt reguljära uttryck och funktionen för att modifiera URL:en
     regex = "(?P<url>https?://[^\\s]+)"
 
     def modify_url(url):
         return url[:-2] + "_400.png?q=75&w=2000"
 
-    # Extrahera matchningen från kolumnen images och applicera funktionen
     df['image_compiled'] = df['images'].str.extract(regex, expand=False).apply(modify_url)
 
     return df.to_dict('records')

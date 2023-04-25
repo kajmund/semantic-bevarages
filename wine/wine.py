@@ -18,7 +18,8 @@ def load_data(q):
         for idx in result:
             if idx['id'] == data['id']:
                 data['distance'] = idx['distance']
-    return wd
+
+    return sorted(wd, key=operator.itemgetter('distance'), reverse=False)
 
 
 def display_wine(wine, image_url):
@@ -62,7 +63,23 @@ wine_data = load_data(st.session_state['query_text'])
 image_urls = [data['image_compiled'] for data in wine_data]
 
 st.title('Dryckesvis')
-st.write(f'*Query: "{st.session_state["query_text"]}"*')
+st.write(f'*"{st.session_state["query_text"]}"*')
 st.write("---")
 
 display_wines(wine_data)
+js = '''
+<script>
+window.onbeforeunload = function () {
+    function doIt(){
+        window.scrollTo(0,0);
+        alert('kool')
+    }
+    
+    const myTimeout = setTimeout(doIt, 5000);
+    
+};
+  
+</script>
+'''
+
+st.components.v1.html(js)

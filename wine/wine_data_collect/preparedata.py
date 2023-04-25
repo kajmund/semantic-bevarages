@@ -50,12 +50,16 @@ def to_description(row) -> str:
     return description.strip().lower()
 
 
-def collect_all_sentences(limit=10000, db='./systemet.db'):
+def collect_all_sentences(limit=-1, db='../systemet.db'):
     texts = []
     con = sqlite3.connect(db)
     con.row_factory = sqlite3.Row
     cur = con.cursor()
-    cur.execute("SELECT * FROM systembolaget limit " + str(limit))
+    if limit == -1:
+        cur.execute("SELECT * FROM systembolaget")
+    else:
+        cur.execute("SELECT * FROM systembolaget limit " + str(limit))
+
     rows = cur.fetchall()
     for row in rows:
         texts.append(to_description(row))

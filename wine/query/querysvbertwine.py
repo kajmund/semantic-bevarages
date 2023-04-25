@@ -4,15 +4,15 @@ import streamlit as st
 from sentence_transformers import SentenceTransformer
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource  # 👈 Add the caching decorator
 def load_model():
     model_name = 'KBLab/sentence-bert-swedish-cased'
-    return SentenceTransformer(model_name, device='cuda')
+    return SentenceTransformer(model_name, device='cpu')
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def load_index():
-    return faiss.read_index("./wine/wine_data_collect/movies_desc.index")
+    return faiss.read_index("./wine/wine_data_collect/wines.index")
 
 
 # Ladda modell och index vid start

@@ -3,7 +3,7 @@ import faiss
 import numpy as np
 import preparedata
 
-data = preparedata.collect_all_sentences(10000)
+data = preparedata.collect_all_sentences()
 vinbeskrivningar = data['vinbeskrivning'].tolist()
 ids = data['id'].tolist()
 ids = np.array(ids)
@@ -29,4 +29,4 @@ faiss.write_index(index, "trained.index")  ## The trained.index contains the det
 
 index.add_with_ids(embeddings, ids)
 print("Total Number of Embeddings in the index", index.ntotal)
-faiss.write_index(index, "movies_desc.index")
+faiss.write_index(index, "wines.index")
